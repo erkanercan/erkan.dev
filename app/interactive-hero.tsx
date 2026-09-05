@@ -167,8 +167,8 @@ export function InteractiveHero() {
       aria-label="Introduction"
     >
       <header className={styles.header}>
-        <Link className={styles.wordmark} href="/" aria-label="Erkan, home">
-          erkan<span>.</span>
+        <Link className={styles.wordmark} href="/" aria-label="Erkan Ercan, home">
+          Erkan Ercan<span>.</span>
         </Link>
       </header>
 

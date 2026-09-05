@@ -138,7 +138,7 @@
 .socials {
   display: grid;
   border-bottom: 1px solid rgba(238, 234, 227, 0.24);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .socials a {
@@ -151,7 +151,7 @@
   transition: background-color 180ms ease, color 180ms ease;
 }
 
-.socials a:first-child {
+.socials a:not(:last-child) {
   border-right: 1px solid rgba(238, 234, 227, 0.24);
 }
 
@@ -232,7 +232,7 @@
     grid-template-columns: 1fr;
   }
 
-  .socials a:first-child {
+  .socials a:not(:last-child) {
     border-right: 0;
     border-bottom: 1px solid rgba(238, 234, 227, 0.24);
   }

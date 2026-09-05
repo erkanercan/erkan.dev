@@ -128,7 +128,12 @@ export function CaseFiles() {
               only what proved reusable.
             </p>
           </div>
-          <a href="https://sablebook.com" target="_blank" rel="noreferrer">
+          <a
+            href="https://sablebook.com"
+            target="_blank"
+            rel="noreferrer"
+            data-umami-event="portfolio_project_sablebook_clicked"
+          >
             Visit Sablebook <span aria-hidden="true">↗</span>
           </a>
         </footer>
@@ -170,7 +175,12 @@ export function CaseFiles() {
               updater.
             </p>
           </div>
-          <a href="https://73kit.erkan.dev" target="_blank" rel="noreferrer">
+          <a
+            href="https://73kit.erkan.dev"
+            target="_blank"
+            rel="noreferrer"
+            data-umami-event="portfolio_project_73kit_clicked"
+          >
             Open 73Kit <span aria-hidden="true">↗</span>
           </a>
         </footer>

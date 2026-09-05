@@ -19,8 +19,12 @@ export function Contact() {
         </div>
 
         <address className={styles.address}>
-          <a className={styles.email} href="mailto:erkanercandev@gmail.com">
-            <span>erkanercandev@gmail.com</span>
+          <a
+            className={styles.email}
+            href="mailto:hello@erkan.dev"
+            data-umami-event="portfolio_contact_email_clicked"
+          >
+            <span>hello@erkan.dev</span>
             <span aria-hidden="true">↗</span>
           </a>
 
@@ -29,6 +33,7 @@ export function Contact() {
               href="https://github.com/erkanercan"
               target="_blank"
               rel="noreferrer"
+              data-umami-event="portfolio_social_github_clicked"
             >
               <span>GitHub</span>
               <small>
@@ -39,10 +44,21 @@ export function Contact() {
               href="https://www.linkedin.com/in/erkan-ercan/"
               target="_blank"
               rel="noreferrer"
+              data-umami-event="portfolio_social_linkedin_clicked"
             >
               <span>LinkedIn</span>
               <small>
                 Erkan Ercan <span aria-hidden="true">↗</span>
+              </small>
+            </a>
+            <a
+              href="/erkan-ercan-resume.pdf"
+              download="erkan-ercan-resume.pdf"
+              data-umami-event="portfolio_resume_downloaded"
+            >
+              <span>Résumé</span>
+              <small>
+                PDF · 2 pages <span aria-hidden="true">↓</span>
               </small>
             </a>
           </div>
