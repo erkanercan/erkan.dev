@@ -1,0 +1,88 @@
+.trigger {
+  display: inline;
+  border: 0;
+  border-bottom: 0.055em solid currentColor;
+  padding: 0;
+  background: transparent;
+  color: #b53d29;
+  cursor: pointer;
+  font: inherit;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  line-height: inherit;
+  text-decoration: none;
+  text-underline-offset: 0.09em;
+}
+
+.trigger:hover {
+  border-bottom-style: dashed;
+}
+
+.trigger:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
+}
+
+.viewport {
+  position: fixed;
+  z-index: 55;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.encounter {
+  position: absolute;
+  inset: 0;
+}
+
+.erkan,
+.frenchie {
+  position: absolute;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.erkan {
+  top: clamp(-118px, -7vw, -52px);
+  left: clamp(-165px, -8vw, -54px);
+  width: clamp(370px, 48vw, 790px);
+  transform-origin: 33% 12%;
+}
+
+.frenchie {
+  right: clamp(-96px, -4vw, -34px);
+  bottom: clamp(-172px, -10vw, -82px);
+  width: clamp(340px, 43vw, 700px);
+  transform-origin: 70% 88%;
+}
+
+.erkan img,
+.frenchie img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 640px) {
+  .erkan {
+    top: -30px;
+    left: -118px;
+    width: min(92vw, 560px);
+  }
+
+  .frenchie {
+    right: -72px;
+    bottom: -72px;
+    width: min(82vw, 500px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .erkan,
+  .frenchie {
+    will-change: opacity;
+  }
+}

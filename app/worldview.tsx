@@ -1,4 +1,5 @@
 import styles from "./worldview.module.css";
+import { DogInterruptionTrigger } from "./dog-interruption";
 import { WrongAdmission } from "./wrong-admission";
 
 export function Worldview() {
@@ -35,7 +36,7 @@ export function Worldview() {
         </li>
         <li className={styles.dogs}>
           <p>
-            I like <em>dogs.</em>
+            I like <DogInterruptionTrigger />
           </p>
           <small>This does not need a product angle.</small>
         </li>

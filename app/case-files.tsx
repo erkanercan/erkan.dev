@@ -1,6 +1,6 @@
 import Image from "next/image";
 import mark73Kit from "../public/case-files/73kit-mark.svg";
-import sablebookOverview from "../public/case-files/sablebook-overview.jpg";
+import sablebookOverview from "../public/case-files/sablebook-overview.webp";
 import styles from "./case-files.module.css";
 
 const sablebookFacts = [

@@ -1,6 +1,7 @@
 import { CaseFiles } from "./case-files";
 import { ConsoleEasterEgg } from "./console-easter-egg";
 import { Contact } from "./contact";
+import { DogInterruption } from "./dog-interruption";
 import { InteractiveHero } from "./interactive-hero";
 import styles from "./page.module.css";
 import { RadioHandshake } from "./radio-handshake";
@@ -11,6 +12,7 @@ export default function Home() {
     <main className={styles.page}>
       <ConsoleEasterEgg />
       <RadioHandshake />
+      <DogInterruption />
       <InteractiveHero />
       <div className={styles.continuation}>
         <CaseFiles />

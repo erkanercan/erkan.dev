@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import xrayPortrait from "../public/character/xray-anatomy.png";
+import xrayPortrait from "../public/character/xray-anatomy.webp";
 import { GazeCharacter } from "./gaze-character";
 import styles from "./interactive-hero.module.css";
 
