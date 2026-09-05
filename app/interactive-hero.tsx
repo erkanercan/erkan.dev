@@ -15,6 +15,9 @@ const experimentLayers = [
   ["Recovery", "Give it a second."],
 ] as const;
 
+const sourceHonesty =
+  "Yes, all 105 eye frames are in there. No, it was not the sensible solution.";
+
 const challenges = {
   booking: {
     label: "Booking chaos",
@@ -229,16 +232,34 @@ export function InteractiveHero() {
               {(experimentActive ? experimentLayers : challenge.layers).map(([label, value], index) => (
                 <div key={label}>
                   <span>0{index + 1} · {label}</span>
-                  <p>{value}</p>
+                  {selected === "midnight" && label === "Under the skin" ? (
+                    <div className={styles.sourceNote}>
+                      <p>{value}</p>
+                      <p className={styles.sourceHonesty} aria-hidden="true">
+                        {sourceHonesty}
+                      </p>
+                    </div>
+                  ) : (
+                    <p>{value}</p>
+                  )}
                 </div>
               ))}
             </div>
+            {selected === "midnight" ? (
+              <span className={styles.srOnly} id="source-honesty">
+                {sourceHonesty}
+              </span>
+            ) : null}
             <div className={styles.actions}>
               <a
                 className={styles.projectLink}
                 href={challenge.href}
                 target="_blank"
                 rel="noreferrer"
+                data-honest-source={selected === "midnight" ? "true" : undefined}
+                aria-describedby={
+                  selected === "midnight" ? "source-honesty" : undefined
+                }
               >
                 {challenge.linkLabel} <span aria-hidden="true">↗</span>
               </a>
