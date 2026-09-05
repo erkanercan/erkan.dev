@@ -28,6 +28,18 @@ pnpm exec next build --webpack
 The Webpack flag keeps the production check reliable in restricted local
 environments where Turbopack cannot start its CSS worker.
 
+## Cloudflare Workers
+
+The production site runs on Cloudflare Workers through vinext.
+
+```bash
+pnpm build:vinext
+pnpm deploy:vinext
+```
+
+The Worker owns the `erkan.dev` and `www.erkan.dev` custom domains. The latter
+is permanently redirected to the apex domain by `next.config.ts`.
+
 ## Search ownership
 
 The site supports optional build-time ownership tokens for webmaster tools:

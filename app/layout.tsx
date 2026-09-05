@@ -44,11 +44,25 @@ export const metadata: Metadata = {
     firstName: "Erkan",
     lastName: "Ercan",
     username: "erkanercan",
+    images: [
+      {
+        url: "/erkan-ercan-social-card.png",
+        width: 1200,
+        height: 630,
+        alt: "Erkan Ercan — software engineer and product builder for complicated, stubborn problems",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: site.title,
     description: site.description,
+    images: [
+      {
+        url: "/erkan-ercan-social-card.png",
+        alt: "Erkan Ercan — software engineer and product builder for complicated, stubborn problems",
+      },
+    ],
   },
   robots: {
     index: true,

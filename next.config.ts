@@ -17,8 +17,9 @@ const nextConfig: NextConfig = {
     ];
   },
   headers() {
+    const production = process.env.NODE_ENV === "production";
     const characterCacheControl =
-      process.env.NODE_ENV === "production"
+      production
         ? "public, max-age=31536000, immutable"
         : "public, max-age=0, must-revalidate";
 
