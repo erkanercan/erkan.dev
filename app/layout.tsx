@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Erkan — Frontend Engineer & Creative Technologist",
   description:
-    "Interfaces, products and AI-powered experiences designed with equal attention to architecture and personality.",
+    "I turn complicated ideas into software that feels simple, useful and unmistakably human.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

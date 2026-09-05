@@ -12,15 +12,16 @@ export default function Home() {
 
         <section className="hero-content" id="top" aria-labelledby="hero-title">
           <p className="eyebrow">
-            Senior Frontend Engineer <span>·</span> Creative Technologist
+            <span>Senior Frontend Engineer</span>
+            <span>Creative Technologist</span>
           </p>
           <h1 id="hero-title">
             <span className="title-left">I build<br />software</span>
             <span className="title-right">that feels<br /><em>alive.</em></span>
           </h1>
           <p className="hero-description">
-            Interfaces, products and AI-powered experiences designed with equal
-            attention to architecture and personality.
+            I turn complicated ideas into software that feels simple, useful and
+            unmistakably human.
           </p>
           <div className="hero-actions" aria-label="Introduction links">
             <a className="button button-primary" href="#work">
@@ -32,6 +33,9 @@ export default function Home() {
           </div>
 
           <GazeCharacter />
+          <p className="character-note">
+            Move your cursor. He has opinions.
+          </p>
         </section>
       </div>
     </main>
