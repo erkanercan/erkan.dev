@@ -1,0 +1,60 @@
+.admission {
+  display: inline;
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-align: inherit;
+}
+
+.stage {
+  position: relative;
+  display: inline-grid;
+  min-block-size: 1em;
+  vertical-align: baseline;
+}
+
+.stage::before {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: 0.76em;
+  content: "“I was technically correct.”";
+}
+
+.stage em {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: inline-block;
+  color: #b53d29;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 400;
+  transform-origin: left center;
+  text-decoration: underline;
+  text-decoration-color: rgba(181, 61, 41, 0.35);
+  text-decoration-style: dotted;
+  text-decoration-thickness: 0.035em;
+  text-underline-offset: 0.09em;
+  will-change: transform, opacity, filter;
+}
+
+.admission:hover .stage em,
+.admission:focus-visible .stage em {
+  text-decoration-color: currentColor;
+}
+
+.admission:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid rgba(181, 61, 41, 0.6);
+  outline-offset: 4px;
+}
+
+.defensive {
+  font-size: 0.76em;
+}

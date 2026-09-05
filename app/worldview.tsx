@@ -1,4 +1,5 @@
 import styles from "./worldview.module.css";
+import { WrongAdmission } from "./wrong-admission";
 
 export function Worldview() {
   return (
@@ -22,7 +23,7 @@ export function Worldview() {
         </li>
         <li className={styles.honesty}>
           <p>
-            Honesty includes saying <em>“I was wrong.”</em>
+            Honesty includes saying <WrongAdmission />
           </p>
           <small>Annoying, but useful.</small>
         </li>
