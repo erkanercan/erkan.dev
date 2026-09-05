@@ -1,0 +1,320 @@
+.receiver {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  pointer-events: none;
+}
+
+.transmission {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  width: 100%;
+  min-height: 100dvh;
+  padding: clamp(18px, 2.4vw, 38px) clamp(22px, 5vw, 76px);
+  background: #171714;
+  color: #eeeae3;
+  grid-template-rows: auto 1fr auto;
+  pointer-events: auto;
+}
+
+.transmission::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(238, 234, 227, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238, 234, 227, 0.07) 1px, transparent 1px);
+  background-size: 64px 64px;
+  content: "";
+  mask-image: linear-gradient(to bottom, black, transparent 78%);
+  pointer-events: none;
+}
+
+.transmission::after {
+  position: absolute;
+  top: 0;
+  left: -25%;
+  width: 25%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #cf4b32, transparent);
+  animation: scan 1.4s 0.3s ease-out 1 both;
+  content: "";
+}
+
+.header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(238, 234, 227, 0.26);
+  padding-bottom: clamp(14px, 1.8vw, 24px);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: clamp(0.58rem, 0.65vw, 0.72rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.status {
+  color: #cf4b32;
+  opacity: 0;
+  animation: reveal 0.28s 2.94s ease-out both;
+}
+
+.header button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+.header button:hover,
+.header button:focus-visible {
+  color: #cf4b32;
+}
+
+.header button:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 6px;
+}
+
+.header kbd {
+  margin-left: 7px;
+  border: 1px solid rgba(238, 234, 227, 0.35);
+  padding: 3px 5px;
+  font: inherit;
+}
+
+.readout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-items: center;
+  grid-template-columns: minmax(130px, 0.28fr) minmax(0, 1fr);
+  gap: clamp(40px, 8vw, 150px);
+}
+
+.metadata {
+  display: grid;
+  align-self: stretch;
+  margin: 0;
+  border-right: 1px solid rgba(238, 234, 227, 0.2);
+  padding: clamp(40px, 8vh, 90px) clamp(24px, 4vw, 70px) clamp(40px, 8vh, 90px) 0;
+  align-content: center;
+  gap: clamp(26px, 5vh, 54px);
+}
+
+.metadata div {
+  display: grid;
+  gap: 7px;
+}
+
+.metadata dt,
+.metadata dd,
+.signal > p:first-child,
+.decoded,
+.footer span {
+  font-family: var(--font-ibm-plex-mono), monospace;
+  text-transform: uppercase;
+}
+
+.metadata dt,
+.signal > p:first-child,
+.footer span {
+  color: rgba(238, 234, 227, 0.48);
+  font-size: clamp(0.55rem, 0.65vw, 0.68rem);
+  font-weight: 600;
+  letter-spacing: 0.11em;
+}
+
+.metadata dt,
+.metadata dd,
+.signal p,
+.signal h2,
+.footer p {
+  margin: 0;
+}
+
+.metadata dd {
+  font-size: clamp(0.9rem, 1.25vw, 1.25rem);
+  letter-spacing: -0.02em;
+}
+
+.metadata div:nth-child(3) dd {
+  opacity: 0;
+  animation: reveal 0.28s 2.94s ease-out both;
+}
+
+.signal {
+  padding: clamp(38px, 7vh, 80px) 0;
+}
+
+.signal h2 {
+  margin-top: clamp(18px, 3vh, 34px);
+  font-size: clamp(4.5rem, 10vw, 10.5rem);
+  font-weight: 610;
+  letter-spacing: -0.09em;
+  line-height: 0.76;
+}
+
+.signal h2 em {
+  color: #cf4b32;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 400;
+}
+
+.morse {
+  display: flex;
+  max-width: 850px;
+  align-items: center;
+  margin-top: clamp(48px, 8vh, 90px);
+  gap: clamp(7px, 1vw, 15px);
+}
+
+.morse i {
+  display: block;
+  height: clamp(9px, 1.1vw, 15px);
+  background: #eeeae3;
+  opacity: 0;
+  transform-origin: left center;
+  animation-name: receive;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+.morse i:nth-child(1) { animation-delay: 700ms; }
+.morse i:nth-child(2) { animation-delay: 860ms; }
+.morse i:nth-child(3) { animation-delay: 1020ms; }
+.morse i:nth-child(4) { margin-left: clamp(20px, 3vw, 52px); animation-delay: 1340ms; }
+.morse i:nth-child(5) { animation-delay: 1660ms; }
+.morse i:nth-child(6) { animation-delay: 1980ms; }
+.morse i:nth-child(7) { margin-left: clamp(20px, 3vw, 52px); animation-delay: 2460ms; }
+.morse i:nth-child(8) { animation-delay: 2620ms; }
+.morse i:nth-child(9) { animation-delay: 2780ms; }
+
+.dot {
+  width: clamp(9px, 1.1vw, 15px);
+  animation-duration: 80ms;
+}
+
+.dash {
+  width: clamp(38px, 5.2vw, 76px);
+  animation-duration: 240ms;
+}
+
+.decoded {
+  display: flex;
+  margin-top: 18px !important;
+  gap: 0.58em;
+  color: #cf4b32;
+  font-size: clamp(1.05rem, 1.8vw, 1.85rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.decoded span {
+  opacity: 0;
+  animation: reveal 0.2s ease-out both;
+}
+
+.decoded span:nth-child(1) {
+  animation-delay: 1.1s;
+}
+
+.decoded span:nth-child(2) {
+  animation-delay: 2.22s;
+}
+
+.decoded span:nth-child(3) {
+  animation-delay: 2.86s;
+}
+
+.footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-top: 1px solid rgba(238, 234, 227, 0.26);
+  padding-top: clamp(18px, 2.4vw, 32px);
+  gap: 32px;
+}
+
+.footer p {
+  max-width: 790px;
+  font-size: clamp(1.55rem, 3vw, 3.4rem);
+  font-weight: 560;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  opacity: 0;
+  animation: reveal 0.42s 3.12s ease-out both;
+}
+
+@keyframes receive {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes scan {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(500%);
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 700px) {
+  .receiver {
+    display: none;
+  }
+}
+
+@media (max-height: 700px) and (min-width: 701px) {
+  .signal h2 {
+    font-size: clamp(4rem, 9vw, 7.5rem);
+  }
+
+  .morse {
+    margin-top: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transmission::after,
+  .morse i,
+  .status,
+  .metadata div:nth-child(3) dd,
+  .decoded span,
+  .footer p {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
