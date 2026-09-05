@@ -1,4 +1,5 @@
 import styles from "./contact.module.css";
+import { site } from "@/lib/site";
 
 export function Contact() {
   return (
@@ -21,18 +22,18 @@ export function Contact() {
         <address className={styles.address}>
           <a
             className={styles.email}
-            href="mailto:hello@erkan.dev"
+            href={`mailto:${site.email}`}
             data-umami-event="portfolio_contact_email_clicked"
           >
-            <span>hello@erkan.dev</span>
+            <span>{site.email}</span>
             <span aria-hidden="true">↗</span>
           </a>
 
           <div className={styles.socials}>
             <a
-              href="https://github.com/erkanercan"
+              href={site.github}
               target="_blank"
-              rel="noreferrer"
+              rel="me noreferrer"
               data-umami-event="portfolio_social_github_clicked"
             >
               <span>GitHub</span>
@@ -41,9 +42,9 @@ export function Contact() {
               </small>
             </a>
             <a
-              href="https://www.linkedin.com/in/erkan-ercan/"
+              href={site.linkedin}
               target="_blank"
-              rel="noreferrer"
+              rel="me noreferrer"
               data-umami-event="portfolio_social_linkedin_clicked"
             >
               <span>LinkedIn</span>

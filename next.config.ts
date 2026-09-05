@@ -1,6 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.erkan.dev" }],
+        destination: "https://erkan.dev/:path*",
+        permanent: true,
+      },
+      {
+        source: "/Erkan_Ercan_CV.pdf",
+        destination: "/erkan-ercan-resume.pdf",
+        permanent: true,
+      },
+    ];
+  },
   headers() {
     const characterCacheControl =
       process.env.NODE_ENV === "production"

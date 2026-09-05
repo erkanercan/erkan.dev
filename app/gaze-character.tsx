@@ -411,6 +411,7 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
           width={1920}
           height={1080}
           sizes="(max-width: 767px) 120vw, (max-width: 1100px) 72vw, 62vw"
+          loading="eager"
           unoptimized
         />
       )}
