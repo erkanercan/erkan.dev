@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { recordEasterEgg } from "./easter-egg-analytics";
 
 const FIRST_LOOP_FRAME = 16;
@@ -30,6 +30,7 @@ const loadedFrames = new Set<number>();
 const frameObjectUrls = new Map<number, string>();
 const frameLoadPromises = new Map<number, Promise<void>>();
 let progressiveLoadPromise: Promise<void> | undefined;
+let priorityFramesReady = false;
 
 function frameSrc(frame: number) {
   return `/character/loop/frame-${String(frame).padStart(3, "0")}.webp?v=${ASSET_VERSION}`;
@@ -95,11 +96,26 @@ function preloadFrame(frame: number) {
   return promise;
 }
 
+function decodeFrame(frame: number) {
+  const objectUrl = frameObjectUrls.get(frame);
+  if (!objectUrl) return Promise.resolve();
+
+  const image = new window.Image();
+  image.src = objectUrl;
+  return image.decode().catch(() => undefined);
+}
+
 function loadFramesProgressively() {
   if (progressiveLoadPromise) return progressiveLoadPromise;
 
   progressiveLoadPromise = (async () => {
     await Promise.all(PRIORITY_FRAMES.map(preloadFrame));
+
+    for (const frame of PRIORITY_FRAMES) {
+      await decodeFrame(frame);
+    }
+
+    priorityFramesReady = true;
 
     const remaining = Array.from(
       { length: LOOP_FRAME_COUNT },
@@ -121,9 +137,9 @@ type GazeCharacterProps = {
 };
 
 export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
-  const hasPauseControl = paused !== undefined;
   const isPaused = paused ?? false;
   const visualRef = useRef<HTMLDivElement>(null);
+  const frameBuffers = useRef<Array<HTMLImageElement | null>>([]);
   const desiredFrame = useRef(114);
   const currentFrame = useRef(114);
   const displayedFrame = useRef(0);
@@ -134,7 +150,6 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
   const pausedRef = useRef(isPaused);
   const wasPaused = useRef(isPaused);
   const cancelBoredom = useRef<() => void>(() => undefined);
-  const [source, setSource] = useState(NEUTRAL_SRC);
 
   useEffect(() => {
     pausedRef.current = isPaused;
@@ -170,6 +185,10 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
     let activityY = 0;
     let hasPointerPosition = false;
     let pointerInDeadZone = false;
+    let activeBuffer = 0;
+    let paintGeneration = 0;
+    let painting = false;
+    let queuedPaint: { frame: number; generation: number } | undefined;
 
     const boredomTarget = () =>
       hero.querySelector<HTMLElement>("[data-boredom-target]");
@@ -196,10 +215,55 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
     cancelBoredom.current = cancelIdleSequence;
 
     const showNeutral = () => {
+      paintGeneration += 1;
+      queuedPaint = undefined;
       tracking.current = false;
       engageAfter.current = 0;
       displayedFrame.current = 0;
-      setSource(NEUTRAL_SRC);
+      visual.dataset.gazeNeutral = "true";
+    };
+
+    const flushPaintQueue = async () => {
+      if (painting) return;
+      painting = true;
+
+      while (queuedPaint) {
+        const request = queuedPaint;
+        queuedPaint = undefined;
+        const nextBuffer = activeBuffer === 0 ? 1 : 0;
+        const image = frameBuffers.current[nextBuffer];
+        const objectUrl = frameObjectUrls.get(request.frame);
+
+        if (!image || !objectUrl) continue;
+
+        image.src = objectUrl;
+
+        try {
+          await image.decode();
+        } catch {
+          continue;
+        }
+
+        if (
+          request.generation !== paintGeneration ||
+          pausedRef.current ||
+          !tracking.current
+        ) {
+          continue;
+        }
+
+        activeBuffer = nextBuffer;
+        visual.dataset.activeFrame = String(activeBuffer);
+        visual.removeAttribute("data-gaze-neutral");
+        displayedFrame.current = request.frame;
+      }
+
+      painting = false;
+    };
+
+    const paintFrame = (frame: number) => {
+      queuedPaint = { frame, generation: paintGeneration };
+      void flushPaintQueue();
     };
 
     const directionFromPoint = (clientX: number, clientY: number) => {
@@ -332,6 +396,7 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
 
       if (
         enabled &&
+        priorityFramesReady &&
         !pausedRef.current &&
         pointerInHero.current &&
         tracking.current
@@ -358,8 +423,7 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
             frameRequest = requestAnimationFrame(animate);
             return;
           }
-          displayedFrame.current = closest;
-          setSource(objectUrl);
+          paintFrame(closest);
         }
       }
 
@@ -389,12 +453,18 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
     <div
       ref={visualRef}
       className="character-visual"
+      data-active-frame="0"
+      data-gaze-neutral="true"
       data-gaze-paused={isPaused || undefined}
       aria-hidden="true"
     >
       <Image
-        className="character-image"
-        src={source}
+        ref={(image) => {
+          frameBuffers.current[0] = image;
+        }}
+        className="character-image character-frame-buffer"
+        data-frame-buffer="0"
+        src={NEUTRAL_SRC}
         alt=""
         width={1920}
         height={1080}
@@ -403,18 +473,30 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
         loading="eager"
         unoptimized
       />
-      {hasPauseControl && (
-        <Image
-          className="character-image character-neutral-transition"
-          src={NEUTRAL_SRC}
-          alt=""
-          width={1920}
-          height={1080}
-          sizes="(max-width: 767px) 120vw, (max-width: 1100px) 72vw, 62vw"
-          loading="eager"
-          unoptimized
-        />
-      )}
+      <Image
+        ref={(image) => {
+          frameBuffers.current[1] = image;
+        }}
+        className="character-image character-frame-buffer"
+        data-frame-buffer="1"
+        src={NEUTRAL_SRC}
+        alt=""
+        width={1920}
+        height={1080}
+        sizes="(max-width: 767px) 120vw, (max-width: 1100px) 72vw, 62vw"
+        loading="eager"
+        unoptimized
+      />
+      <Image
+        className="character-image character-neutral-transition"
+        src={NEUTRAL_SRC}
+        alt=""
+        width={1920}
+        height={1080}
+        sizes="(max-width: 767px) 120vw, (max-width: 1100px) 72vw, 62vw"
+        loading="eager"
+        unoptimized
+      />
     </div>
   );
 }

@@ -62,8 +62,23 @@ a {
   transition: opacity 900ms cubic-bezier(0.2, 0.75, 0.2, 1);
 }
 
+.character-frame-buffer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.character-visual[data-active-frame="0"] [data-frame-buffer="0"],
+.character-visual[data-active-frame="1"] [data-frame-buffer="1"] {
+  opacity: 1;
+}
+
+.character-visual[data-gaze-neutral="true"] .character-neutral-transition,
 .character-visual[data-gaze-paused="true"] .character-neutral-transition {
   opacity: 1;
+}
+
+.character-visual[data-gaze-paused="true"] .character-neutral-transition {
   transition-duration: 320ms;
 }
 
