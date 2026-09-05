@@ -112,15 +112,35 @@ function loadFramesProgressively() {
   return progressiveLoadPromise;
 }
 
-export function GazeCharacter() {
+type GazeCharacterProps = {
+  paused?: boolean;
+};
+
+export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
+  const hasPauseControl = paused !== undefined;
+  const isPaused = paused ?? false;
   const visualRef = useRef<HTMLDivElement>(null);
   const desiredFrame = useRef(114);
   const currentFrame = useRef(114);
   const displayedFrame = useRef(0);
   const tracking = useRef(false);
   const engageAfter = useRef(0);
+  const resumeUntil = useRef(0);
   const pointerInHero = useRef(false);
+  const pausedRef = useRef(isPaused);
+  const wasPaused = useRef(isPaused);
   const [source, setSource] = useState(NEUTRAL_SRC);
+
+  useEffect(() => {
+    pausedRef.current = isPaused;
+
+    if (wasPaused.current && !isPaused) {
+      engageAfter.current = performance.now() + 80;
+      resumeUntil.current = performance.now() + 1100;
+    }
+
+    wasPaused.current = isPaused;
+  }, [isPaused]);
 
   useEffect(() => {
     const visual = visualRef.current;
@@ -164,6 +184,11 @@ export function GazeCharacter() {
       const nextFrame = frameForDirection(dx, dy);
       desiredFrame.current = nextFrame;
 
+      if (pausedRef.current) {
+        tracking.current = true;
+        return;
+      }
+
       if (!tracking.current) {
         currentFrame.current = nextFrame;
         engageAfter.current = performance.now() + 70;
@@ -181,10 +206,17 @@ export function GazeCharacter() {
       const elapsed = Math.min(time - lastTime, 48);
       lastTime = time;
 
-      if (enabled && pointerInHero.current && tracking.current) {
+      if (
+        enabled &&
+        !pausedRef.current &&
+        pointerInHero.current &&
+        tracking.current
+      ) {
         const difference = circularDelta(currentFrame.current, desiredFrame.current);
-        const easing = 1 - Math.exp(-elapsed / 105);
-        const step = Math.sign(difference) * Math.min(Math.abs(difference) * easing, 3.2);
+        const resuming = time < resumeUntil.current;
+        const easing = 1 - Math.exp(-elapsed / (resuming ? 420 : 105));
+        const maxStep = resuming ? 1.15 : 3.2;
+        const step = Math.sign(difference) * Math.min(Math.abs(difference) * easing, maxStep);
         currentFrame.current =
           positiveModulo(
             currentFrame.current - FIRST_LOOP_FRAME + step,
@@ -228,7 +260,12 @@ export function GazeCharacter() {
   }, []);
 
   return (
-    <div ref={visualRef} className="character-visual" aria-hidden="true">
+    <div
+      ref={visualRef}
+      className="character-visual"
+      data-gaze-paused={isPaused || undefined}
+      aria-hidden="true"
+    >
       <Image
         className="character-image"
         src={source}
@@ -240,6 +277,17 @@ export function GazeCharacter() {
         loading="eager"
         unoptimized
       />
+      {hasPauseControl && (
+        <Image
+          className="character-image character-neutral-transition"
+          src={NEUTRAL_SRC}
+          alt=""
+          width={1920}
+          height={1080}
+          sizes="(max-width: 767px) 120vw, (max-width: 1100px) 72vw, 62vw"
+          unoptimized
+        />
+      )}
     </div>
   );
 }
