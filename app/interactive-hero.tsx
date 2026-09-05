@@ -7,6 +7,14 @@ import xrayPortrait from "../public/character/xray-anatomy.webp";
 import { GazeCharacter } from "./gaze-character";
 import styles from "./interactive-hero.module.css";
 
+const experimentDuration = 3600;
+
+const experimentLayers = [
+  ["What changed", "0.35 degrees."],
+  ["Who asked", "Nobody."],
+  ["Recovery", "Give it a second."],
+] as const;
+
 const challenges = {
   booking: {
     label: "Booking chaos",
@@ -50,7 +58,10 @@ type ChallengeId = keyof typeof challenges;
 
 export function InteractiveHero() {
   const [selected, setSelected] = useState<ChallengeId | null>(null);
+  const [midnightTaps, setMidnightTaps] = useState(0);
+  const [experimentActive, setExperimentActive] = useState(false);
   const challenge = selected ? challenges[selected] : null;
+  const experimentTimer = useRef<number | null>(null);
   const xrayTitle = useRef<HTMLHeadingElement>(null);
   const lastSelected = useRef<ChallengeId | null>(null);
   const returningToChoices = useRef(false);
@@ -68,12 +79,66 @@ export function InteractiveHero() {
     }
   }, [selected]);
 
+  useEffect(() => {
+    return () => {
+      if (experimentTimer.current !== null) {
+        window.clearTimeout(experimentTimer.current);
+      }
+
+      document.querySelector<HTMLElement>("[data-site-page]")?.removeAttribute(
+        "data-experiment",
+      );
+    };
+  }, []);
+
+  const stopExperiment = () => {
+    if (experimentTimer.current !== null) {
+      window.clearTimeout(experimentTimer.current);
+      experimentTimer.current = null;
+    }
+
+    document
+      .querySelector<HTMLElement>("[data-site-page]")
+      ?.removeAttribute("data-experiment");
+    setExperimentActive(false);
+  };
+
+  const startExperiment = () => {
+    if (experimentActive) return;
+
+    const page = document.querySelector<HTMLElement>("[data-site-page]");
+    if (!page) return;
+
+    page.dataset.experiment = "tilt";
+    setExperimentActive(true);
+    experimentTimer.current = window.setTimeout(() => {
+      page.removeAttribute("data-experiment");
+      setExperimentActive(false);
+      setMidnightTaps(1);
+      experimentTimer.current = null;
+    }, experimentDuration);
+  };
+
+  const tapMidnightIdea = () => {
+    if (experimentActive) return;
+
+    if (midnightTaps >= 2) {
+      startExperiment();
+      return;
+    }
+
+    setMidnightTaps((current) => current + 1);
+  };
+
   const inspect = (id: ChallengeId) => {
     lastSelected.current = id;
+    setMidnightTaps(id === "midnight" ? 1 : 0);
     setSelected(id);
   };
 
   const reset = () => {
+    stopExperiment();
+    setMidnightTaps(0);
     returningToChoices.current = true;
     setSelected(null);
   };
@@ -83,6 +148,7 @@ export function InteractiveHero() {
       className={styles.hero}
       data-hero
       data-xray={challenge ? "true" : undefined}
+      data-experiment={experimentActive ? "true" : undefined}
       aria-label="Introduction"
     >
       <header className={styles.header}>
@@ -107,7 +173,9 @@ export function InteractiveHero() {
       </div>
 
       <p className={styles.srOnly} aria-live="polite">
-        {challenge
+        {experimentActive
+          ? "The page tilted slightly. It will repair itself."
+          : challenge
           ? `${challenge.product} X-ray open.`
           : "Choose a problem to inspect."}
       </p>
@@ -119,17 +187,46 @@ export function InteractiveHero() {
         >
           <div className={styles.inputCard}>
             <p className={styles.kicker}>The mess</p>
-            <h2>{challenge.label}</h2>
+            <h2>
+              {selected === "midnight" ? (
+                <button
+                  className={styles.experimentTrigger}
+                  type="button"
+                  onClick={tapMidnightIdea}
+                  disabled={experimentActive}
+                >
+                  {challenge.label}
+                </button>
+              ) : (
+                challenge.label
+              )}
+            </h2>
             <p>{challenge.detail}</p>
           </div>
 
-          <div className={styles.xrayPanel}>
-            <p className={styles.kicker}>Product X-ray · {challenge.product}</p>
-            <h1 id="xray-title" ref={xrayTitle} tabIndex={-1}>
-              What had to<br />stay <em>true.</em>
-            </h1>
+          <div
+            className={styles.xrayPanel}
+            data-questionable={experimentActive ? "true" : undefined}
+          >
+            <div
+              className={styles.panelContent}
+              data-questionable={experimentActive ? "true" : undefined}
+            >
+              <p className={styles.kicker}>
+                {experimentActive
+                  ? "Unscheduled experiment · erkan.dev"
+                  : `Product X-ray · ${challenge.product}`}
+              </p>
+              <h1 id="xray-title" ref={xrayTitle} tabIndex={-1}>
+                {experimentActive ? (
+                  <>One harmless<br />CSS <em>property.</em></>
+                ) : (
+                  <>What had to<br />stay <em>true.</em></>
+                )}
+              </h1>
+            </div>
             <div className={styles.layers}>
-              {challenge.layers.map(([label, value], index) => (
+              {(experimentActive ? experimentLayers : challenge.layers).map(([label, value], index) => (
                 <div key={label}>
                   <span>0{index + 1} · {label}</span>
                   <p>{value}</p>
@@ -151,7 +248,11 @@ export function InteractiveHero() {
             </div>
           </div>
 
-          <p className={styles.status}>Mode 02 · Looking underneath</p>
+          <p className={styles.status}>
+            {experimentActive
+              ? "Mode · Questionable judgment"
+              : "Mode 02 · Looking underneath"}
+          </p>
         </section>
       ) : (
         <section className={styles.intro} aria-labelledby="hero-title">

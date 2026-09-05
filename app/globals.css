@@ -23,6 +23,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: clip;
   background: #e6e1d9;
   color: var(--foreground);
   font-family: var(--font-space-grotesk), Arial, Helvetica, sans-serif;
