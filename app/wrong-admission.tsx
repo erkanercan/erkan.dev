@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { recordEasterEgg } from "./easter-egg-analytics";
 import styles from "./wrong-admission.module.css";
 
 const copy = {
@@ -48,6 +49,7 @@ export function WrongAdmission() {
 
   const object = useCallback(() => {
     clearTimers();
+    recordEasterEgg("wrong-admission");
     setState("defensive");
 
     timers.current = [

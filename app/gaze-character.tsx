@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { recordEasterEgg } from "./easter-egg-analytics";
 
 const FIRST_LOOP_FRAME = 16;
 const LAST_LOOP_FRAME = 120;
@@ -235,6 +236,7 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
       cardTimer = window.setTimeout(() => {
         if (boredomActive && !pausedRef.current) {
           target.dataset.watched = "true";
+          recordEasterEgg("boredom-glance");
         }
       }, BOREDOM_CARD_DELAY);
 

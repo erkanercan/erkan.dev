@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import xrayPortrait from "../public/character/xray-anatomy.webp";
+import { recordEasterEgg } from "./easter-egg-analytics";
 import { GazeCharacter } from "./gaze-character";
 import styles from "./interactive-hero.module.css";
 
@@ -67,6 +68,7 @@ export function InteractiveHero() {
   const challenge = selected ? challenges[selected] : null;
   const experimentTimer = useRef<number | null>(null);
   const closeTimer = useRef<number | null>(null);
+  const honestyTimer = useRef<number | null>(null);
   const xrayTitle = useRef<HTMLHeadingElement>(null);
   const lastSelected = useRef<ChallengeId | null>(null);
   const returningToChoices = useRef(false);
@@ -94,6 +96,10 @@ export function InteractiveHero() {
         window.clearTimeout(closeTimer.current);
       }
 
+      if (honestyTimer.current !== null) {
+        window.clearTimeout(honestyTimer.current);
+      }
+
       document.querySelector<HTMLElement>("[data-site-page]")?.removeAttribute(
         "data-experiment",
       );
@@ -119,6 +125,7 @@ export function InteractiveHero() {
     if (!page) return;
 
     page.dataset.experiment = "tilt";
+    recordEasterEgg("page-tilt");
     setExperimentActive(true);
     experimentTimer.current = window.setTimeout(() => {
       page.removeAttribute("data-experiment");
@@ -156,6 +163,20 @@ export function InteractiveHero() {
       setClosing(false);
       closeTimer.current = null;
     }, 360);
+  };
+
+  const clearHonestyTimer = () => {
+    if (honestyTimer.current === null) return;
+    window.clearTimeout(honestyTimer.current);
+    honestyTimer.current = null;
+  };
+
+  const scheduleHonestyDiscovery = () => {
+    clearHonestyTimer();
+    honestyTimer.current = window.setTimeout(() => {
+      recordEasterEgg("honest-source-note");
+      honestyTimer.current = null;
+    }, 850);
   };
 
   return (
@@ -270,6 +291,16 @@ export function InteractiveHero() {
                 target="_blank"
                 rel="noreferrer"
                 data-honest-source={selected === "midnight" ? "true" : undefined}
+                onPointerEnter={
+                  selected === "midnight" ? scheduleHonestyDiscovery : undefined
+                }
+                onPointerLeave={
+                  selected === "midnight" ? clearHonestyTimer : undefined
+                }
+                onFocus={
+                  selected === "midnight" ? scheduleHonestyDiscovery : undefined
+                }
+                onBlur={selected === "midnight" ? clearHonestyTimer : undefined}
                 aria-describedby={
                   selected === "midnight" ? "source-honesty" : undefined
                 }

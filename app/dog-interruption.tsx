@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { recordEasterEgg } from "./easter-egg-analytics";
 import styles from "./dog-interruption.module.css";
 
 const interruptionEvent = "erkan:dog-interruption";
@@ -42,6 +43,7 @@ export function DogInterruption() {
 
     const begin = () => {
       clearHideTimer();
+      recordEasterEgg("dog-interruption");
       setEncounter((current) => current + 1);
       setVisible(true);
       hideTimer.current = window.setTimeout(hide, encounterDuration);

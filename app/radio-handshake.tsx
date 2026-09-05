@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { recordEasterEgg } from "./easter-egg-analytics";
 import styles from "./radio-handshake.module.css";
 
 const handshake = "...---...";
@@ -52,6 +53,7 @@ export function RadioHandshake() {
 
     const receive = () => {
       clearHideTimer();
+      recordEasterEgg("cw-sos");
       setTransmission((current) => current + 1);
       setVisible(true);
       hideTimer.current = window.setTimeout(
