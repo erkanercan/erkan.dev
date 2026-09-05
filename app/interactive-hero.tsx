@@ -22,7 +22,7 @@ const challenges = {
   },
   radio: {
     label: "A radio manual from 1997",
-    detail: "102,400 bytes · mysterious buttons · one expensive mistake",
+    detail: "binary formats · mysterious buttons · one expensive mistake",
     product: "73Kit · Radio CPS",
     href: "https://73kit.erkan.dev",
     linkLabel: "Open 73Kit",
@@ -79,10 +79,11 @@ export function InteractiveHero() {
   };
 
   return (
-    <main
+    <section
       className={styles.hero}
       data-hero
       data-xray={challenge ? "true" : undefined}
+      aria-label="Introduction"
     >
       <header className={styles.header}>
         <Link className={styles.wordmark} href="/" aria-label="Erkan, home">
@@ -182,6 +183,6 @@ export function InteractiveHero() {
           <p className={styles.status}>Mode 01 · Waiting for a problem</p>
         </section>
       )}
-    </main>
+    </section>
   );
 }
