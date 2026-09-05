@@ -32,12 +32,16 @@
   inset-block-start: 0;
   inset-inline-start: 0;
   display: inline-block;
-  color: #b53d29;
+  color: var(--accent-on-light);
   font-family: var(--font-newsreader), Georgia, serif;
   font-weight: 400;
   transform-origin: left center;
   text-decoration: underline;
-  text-decoration-color: rgba(181, 61, 41, 0.35);
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--accent-on-light) 35%,
+    transparent
+  );
   text-decoration-style: dotted;
   text-decoration-thickness: 0.035em;
   text-underline-offset: 0.09em;
@@ -51,7 +55,7 @@
 
 .admission:focus-visible {
   border-radius: 2px;
-  outline: 2px solid rgba(181, 61, 41, 0.6);
+  outline: 2px solid color-mix(in srgb, var(--accent-on-light) 60%, transparent);
   outline-offset: 4px;
 }
 

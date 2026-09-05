@@ -4,6 +4,9 @@
   --background: #eeeae3;
   --foreground: #171714;
   --accent: #cf4b32;
+  --accent-on-light: #b53d29;
+  --accent-on-dark: #ed674d;
+  --accent-on-dark-hover: #f47a62;
 }
 
 @theme inline {

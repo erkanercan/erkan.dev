@@ -20,7 +20,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Erkan — Frontend Engineer & Creative Technologist",
+  title: "Erkan Ercan — Software for Stubborn Problems",
   description: "Software for complicated, slightly stubborn problems.",
 };
 

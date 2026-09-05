@@ -4,7 +4,7 @@
   border-bottom: 0.055em solid currentColor;
   padding: 0;
   background: transparent;
-  color: #b53d29;
+  color: var(--accent-on-light);
   cursor: pointer;
   font: inherit;
   font-family: var(--font-newsreader), Georgia, serif;

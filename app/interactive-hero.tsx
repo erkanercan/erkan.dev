@@ -284,11 +284,10 @@ export function InteractiveHero() {
             Give me<br />a <em>mess.</em>
           </h1>
           <p className={styles.instruction}>
-            Pick a problem. Let’s look at what people need and what the software
-            has to handle.
+            Pick one. I’ll show you what sits underneath.
           </p>
           <div className={styles.choices} aria-label="Choose a problem to inspect">
-            {(Object.keys(challenges) as ChallengeId[]).map((id, index) => (
+            {(Object.keys(challenges) as ChallengeId[]).map((id) => (
               <button
                 key={id}
                 data-boredom-target={id === "midnight" ? "true" : undefined}
@@ -298,7 +297,6 @@ export function InteractiveHero() {
                 type="button"
                 onClick={() => inspect(id)}
               >
-                <span>0{index + 1}</span>
                 {challenges[id].label}
               </button>
             ))}

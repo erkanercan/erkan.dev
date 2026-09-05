@@ -48,12 +48,9 @@ function EvidenceList({
 }) {
   return (
     <dl className={styles.evidenceList}>
-      {items.map(([label, value], index) => (
+      {items.map(([label, value]) => (
         <div key={label}>
-          <dt>
-            <span>0{index + 1}</span>
-            {label}
-          </dt>
+          <dt>{label}</dt>
           <dd>{value}</dd>
         </div>
       ))}
@@ -219,8 +216,8 @@ export function CaseFiles() {
           <div>
             <span>If I restarted today</span>
             <p>
-              I would build the interruption matrix and collect recovery
-              fixtures before touching the updater UI.
+              I would test every way an update can fail before designing the
+              updater.
             </p>
           </div>
           <a href="https://73kit.erkan.dev" target="_blank" rel="noreferrer">

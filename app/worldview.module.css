@@ -60,7 +60,7 @@
 
 .header h2 em,
 .notes em {
-  color: #b53d29;
+  color: var(--accent-on-light);
   font-family: var(--font-newsreader), Georgia, serif;
   font-weight: 400;
 }

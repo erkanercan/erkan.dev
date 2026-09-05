@@ -36,7 +36,7 @@
   left: -25%;
   width: 25%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #cf4b32, transparent);
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
   animation: scan 1.4s 0.3s ease-out 1 both;
   content: "";
 }
@@ -58,7 +58,7 @@
 }
 
 .status {
-  color: #cf4b32;
+  color: var(--accent);
   opacity: 0;
   animation: reveal 0.28s 2.94s ease-out both;
 }
@@ -76,7 +76,7 @@
 
 .header button:hover,
 .header button:focus-visible {
-  color: #cf4b32;
+  color: var(--accent);
 }
 
 .header button:focus-visible {
@@ -164,7 +164,7 @@
 }
 
 .signal h2 em {
-  color: #cf4b32;
+  color: var(--accent);
   font-family: var(--font-newsreader), Georgia, serif;
   font-weight: 400;
 }
@@ -212,7 +212,7 @@
   display: flex;
   margin-top: 18px !important;
   gap: 0.58em;
-  color: #cf4b32;
+  color: var(--accent);
   font-size: clamp(1.05rem, 1.8vw, 1.85rem);
   font-weight: 600;
   letter-spacing: 0.16em;

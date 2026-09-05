@@ -9,16 +9,18 @@ import { Worldview } from "./worldview";
 
 export default function Home() {
   return (
-    <main className={styles.page} data-site-page>
-      <ConsoleEasterEgg />
+    <>
       <RadioHandshake />
-      <DogInterruption />
-      <InteractiveHero />
-      <div className={styles.continuation}>
-        <CaseFiles />
-        <Worldview />
-        <Contact />
-      </div>
-    </main>
+      <main className={styles.page} data-site-page>
+        <ConsoleEasterEgg />
+        <DogInterruption />
+        <InteractiveHero />
+        <div className={styles.continuation}>
+          <CaseFiles />
+          <Worldview />
+          <Contact />
+        </div>
+      </main>
+    </>
   );
 }

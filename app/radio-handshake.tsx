@@ -25,6 +25,7 @@ export function RadioHandshake() {
   const buffer = useRef("");
   const bufferTimer = useRef<number | null>(null);
   const hideTimer = useRef<number | null>(null);
+  const clearButton = useRef<HTMLButtonElement>(null);
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -116,20 +117,44 @@ export function RadioHandshake() {
     if (!visible) return;
 
     const previousOverflow = document.documentElement.style.overflow;
+    const previousFocus =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    const sitePage = document.querySelector<HTMLElement>("[data-site-page]");
+    const previousInert = sitePage?.inert ?? false;
+    const focusFrame = window.requestAnimationFrame(() => {
+      clearButton.current?.focus({ preventScroll: true });
+    });
+
     document.documentElement.style.overflow = "hidden";
+    if (sitePage) sitePage.inert = true;
 
     return () => {
+      window.cancelAnimationFrame(focusFrame);
       document.documentElement.style.overflow = previousOverflow;
+      if (sitePage) sitePage.inert = previousInert;
+      previousFocus?.focus({ preventScroll: true });
     };
   }, [visible]);
 
   return (
-    <div className={styles.receiver} aria-live="polite" aria-atomic="true">
+    <div className={styles.receiver}>
       <AnimatePresence initial={false} mode="wait">
         {visible ? (
           <motion.aside
             className={styles.transmission}
             key={transmission}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cw-title"
+            aria-describedby="cw-summary"
+            onKeyDown={(event) => {
+              if (event.key !== "Tab") return;
+
+              event.preventDefault();
+              clearButton.current?.focus();
+            }}
             initial={
               reduceMotion
                 ? { opacity: 0 }
@@ -150,7 +175,11 @@ export function RadioHandshake() {
             <header className={styles.header}>
               <span>73KIT / CW RECEIVE</span>
               <span className={styles.status}>Signal complete</span>
-              <button type="button" onClick={() => setVisible(false)}>
+              <button
+                ref={clearButton}
+                type="button"
+                onClick={() => setVisible(false)}
+              >
                 Clear <kbd>Esc</kbd>
               </button>
             </header>
@@ -190,7 +219,11 @@ export function RadioHandshake() {
                   <i className={styles.dot} />
                   <i className={styles.dot} />
                 </div>
-                <p className={styles.decoded} aria-label="Decoded message: SOS">
+                <p
+                  id="cw-summary"
+                  className={styles.decoded}
+                  aria-label="Decoded message: SOS"
+                >
                   <span>S</span>
                   <span>O</span>
                   <span>S</span>

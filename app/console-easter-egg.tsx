@@ -47,14 +47,13 @@ const frenchie = String.raw`
 
 const message = `%cYou opened the console.%c
 Fair enough. This is probably where we should have started.
-Make this DevTools window bigger if you can't understand what's going on here. It's a lot of text, but it's worth seeing.
 
 %c${frenchie}%c
 
 The Frenchie has no product angle.`;
 
 const headingStyle = [
-  "color: #ed674d",
+  "color: #cf4b32",
   "font-family: ui-monospace, SFMono-Regular, Menlo, monospace",
   "font-size: 15px",
   "font-weight: 700",

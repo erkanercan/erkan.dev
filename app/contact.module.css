@@ -22,21 +22,6 @@
   pointer-events: none;
 }
 
-.contact::after {
-  position: absolute;
-  right: -18vw;
-  bottom: -42vw;
-  width: min(74vw, 980px);
-  aspect-ratio: 1;
-  border: 1px solid rgba(237, 103, 77, 0.16);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 7vw rgba(237, 103, 77, 0.025),
-    0 0 0 14vw rgba(237, 103, 77, 0.018);
-  content: "";
-  pointer-events: none;
-}
-
 .inner {
   position: relative;
   z-index: 1;
@@ -86,7 +71,7 @@
 }
 
 .message h2 em {
-  color: #ed674d;
+  color: var(--accent-on-dark);
   font-family: var(--font-newsreader), Georgia, serif;
   font-weight: 400;
 }
@@ -124,7 +109,7 @@
 }
 
 .email > span:last-child {
-  color: #ed674d;
+  color: var(--accent-on-dark);
   transition: transform 180ms ease;
 }
 
@@ -172,7 +157,7 @@
 
 .email:focus-visible,
 .socials a:focus-visible {
-  outline: 3px solid #ed674d;
+  outline: 3px solid var(--accent-on-dark);
   outline-offset: 5px;
 }
 

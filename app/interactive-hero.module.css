@@ -71,7 +71,7 @@
 .xrayPanel a:focus-visible,
 .xrayPanel button:focus-visible,
 .xrayPanel h1:focus-visible {
-  outline: 3px solid rgba(237, 103, 77, 0.5);
+  outline: 3px solid color-mix(in srgb, var(--accent-on-dark) 50%, transparent);
   outline-offset: 4px;
 }
 
@@ -245,13 +245,6 @@
   transition-duration: 650ms;
 }
 
-.choices button > span {
-  margin-right: 12px;
-  color: var(--accent);
-  font-family: var(--font-ibm-plex-mono), monospace;
-  font-size: 0.62rem;
-}
-
 .status {
   position: absolute;
   right: clamp(24px, 5vw, 72px);
@@ -307,7 +300,7 @@
 
 .experimentTrigger:focus-visible {
   border-radius: 2px;
-  outline: 2px solid #ed674d;
+  outline: 2px solid var(--accent-on-dark);
   outline-offset: 5px;
 }
 
@@ -333,7 +326,7 @@
 }
 
 .xrayPanel[data-questionable="true"] {
-  border-color: rgba(237, 103, 77, 0.5);
+  border-color: color-mix(in srgb, var(--accent-on-dark) 50%, transparent);
 }
 
 .panelContent[data-questionable="true"] {
@@ -354,7 +347,7 @@
 
 .xrayPanel > .kicker,
 .layers span {
-  color: #ed674d;
+  color: var(--accent-on-dark);
 }
 
 .xrayPanel h1 {
@@ -446,7 +439,7 @@
 
 .actions .projectLink {
   border-color: transparent;
-  background: #ed674d;
+  background: var(--accent-on-dark);
   color: #191b18;
 }
 
@@ -458,7 +451,7 @@
 
 .actions .projectLink:hover {
   border-color: transparent;
-  background: #f47a62;
+  background: var(--accent-on-dark-hover);
 }
 
 .actions span {

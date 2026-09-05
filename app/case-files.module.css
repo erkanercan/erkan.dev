@@ -63,7 +63,7 @@
 
 .sectionHeader h2 em,
 .caseHeader h3 em {
-  color: #cf4b32;
+  color: var(--accent);
   font-family: var(--font-newsreader), Georgia, serif;
   font-weight: 400;
 }
@@ -238,9 +238,6 @@
 }
 
 .evidenceList dt {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   font-family: var(--font-ibm-plex-mono), monospace;
   font-size: 0.6rem;
   font-weight: 650;
@@ -248,18 +245,8 @@
   text-transform: uppercase;
 }
 
-.evidenceList dt span {
-  display: inline-grid;
-  width: 24px;
-  height: 24px;
-  place-items: center;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  font-size: 0.52rem;
-}
-
 .evidenceList dd {
-  margin: 12px 0 0 34px;
+  margin: 12px 0 0;
   font-size: clamp(0.82rem, 1.05vw, 0.96rem);
   line-height: 1.58;
 }
