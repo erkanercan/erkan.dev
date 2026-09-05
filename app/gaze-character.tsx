@@ -22,6 +22,9 @@ const DIRECTION_SEGMENTS = [
 ] as const;
 
 const PRIORITY_FRAMES = [16, 22, 39, 55, 70, 84, 96, 108, 114, 120];
+const BOREDOM_DELAY = 12_000;
+const BOREDOM_CARD_DELAY = 900;
+const BOREDOM_RETURN_DELAY = 2_900;
 const loadedFrames = new Set<number>();
 const frameObjectUrls = new Map<number, string>();
 const frameLoadPromises = new Map<number, Promise<void>>();
@@ -129,6 +132,7 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
   const pointerInHero = useRef(false);
   const pausedRef = useRef(isPaused);
   const wasPaused = useRef(isPaused);
+  const cancelBoredom = useRef<() => void>(() => undefined);
   const [source, setSource] = useState(NEUTRAL_SRC);
 
   useEffect(() => {
@@ -138,6 +142,8 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
       engageAfter.current = performance.now() + 80;
       resumeUntil.current = performance.now() + 1100;
     }
+
+    if (isPaused) cancelBoredom.current();
 
     wasPaused.current = isPaused;
   }, [isPaused]);
@@ -152,6 +158,41 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
     let enabled = finePointer.matches && !reducedMotion.matches;
     let frameRequest = 0;
     let lastTime = performance.now();
+    let idleTimer = 0;
+    let cardTimer = 0;
+    let returnTimer = 0;
+    let boredomUsed = false;
+    let boredomActive = false;
+    let pointerX = 0;
+    let pointerY = 0;
+    let activityX = 0;
+    let activityY = 0;
+    let hasPointerPosition = false;
+    let pointerInDeadZone = false;
+
+    const boredomTarget = () =>
+      hero.querySelector<HTMLElement>("[data-boredom-target]");
+
+    const clearBoredomTimers = () => {
+      window.clearTimeout(idleTimer);
+      window.clearTimeout(cardTimer);
+      window.clearTimeout(returnTimer);
+      idleTimer = 0;
+      cardTimer = 0;
+      returnTimer = 0;
+    };
+
+    const removeCardReaction = () => {
+      boredomTarget()?.removeAttribute("data-watched");
+    };
+
+    const cancelIdleSequence = () => {
+      clearBoredomTimers();
+      removeCardReaction();
+      boredomActive = false;
+    };
+
+    cancelBoredom.current = cancelIdleSequence;
 
     const showNeutral = () => {
       tracking.current = false;
@@ -160,23 +201,100 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
       setSource(NEUTRAL_SRC);
     };
 
+    const directionFromPoint = (clientX: number, clientY: number) => {
+      const bounds = visual.getBoundingClientRect();
+      return frameForDirection(
+        clientX - (bounds.left + bounds.width / 2),
+        clientY - (bounds.top + bounds.height / 2),
+      );
+    };
+
+    const beginBoredom = () => {
+      const target = boredomTarget();
+      if (
+        !enabled ||
+        pausedRef.current ||
+        !pointerInHero.current ||
+        !hasPointerPosition ||
+        !target
+      ) {
+        return;
+      }
+
+      const targetBounds = target.getBoundingClientRect();
+      boredomUsed = true;
+      boredomActive = true;
+      tracking.current = true;
+      desiredFrame.current = directionFromPoint(
+        targetBounds.left + targetBounds.width / 2,
+        targetBounds.top + targetBounds.height / 2,
+      );
+      engageAfter.current = performance.now();
+      resumeUntil.current = performance.now() + 1_800;
+
+      cardTimer = window.setTimeout(() => {
+        if (boredomActive && !pausedRef.current) {
+          target.dataset.watched = "true";
+        }
+      }, BOREDOM_CARD_DELAY);
+
+      returnTimer = window.setTimeout(() => {
+        target.removeAttribute("data-watched");
+        boredomActive = false;
+        if (pointerInDeadZone) {
+          showNeutral();
+        } else {
+          desiredFrame.current = directionFromPoint(pointerX, pointerY);
+          resumeUntil.current = performance.now() + 1_200;
+        }
+      }, BOREDOM_RETURN_DELAY);
+    };
+
+    const scheduleBoredom = () => {
+      window.clearTimeout(idleTimer);
+      if (!boredomUsed && enabled && !pausedRef.current) {
+        idleTimer = window.setTimeout(beginBoredom, BOREDOM_DELAY);
+      }
+    };
+
     const updateCapability = () => {
       enabled = finePointer.matches && !reducedMotion.matches;
       if (enabled) void loadFramesProgressively();
-      else showNeutral();
+      else {
+        cancelIdleSequence();
+        showNeutral();
+      }
     };
 
     const handlePointerMove = (event: PointerEvent) => {
       if (!enabled || event.pointerType === "touch") return;
 
       pointerInHero.current = true;
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+
+      const meaningfulMovement =
+        !hasPointerPosition || Math.hypot(pointerX - activityX, pointerY - activityY) >= 4;
+
+      if (meaningfulMovement) {
+        activityX = pointerX;
+        activityY = pointerY;
+        hasPointerPosition = true;
+        boredomUsed = false;
+        cancelIdleSequence();
+        scheduleBoredom();
+      } else if (boredomActive) {
+        return;
+      }
+
       const bounds = visual.getBoundingClientRect();
       const dx = event.clientX - (bounds.left + bounds.width / 2);
       const dy = event.clientY - (bounds.top + bounds.height / 2);
       const distance = Math.hypot(dx, dy);
       const deadZone = tracking.current ? 74 : 94;
+      pointerInDeadZone = distance < deadZone;
 
-      if (distance < deadZone) {
+      if (pointerInDeadZone) {
         showNeutral();
         return;
       }
@@ -199,6 +317,10 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
 
     const handlePointerLeave = () => {
       pointerInHero.current = false;
+      hasPointerPosition = false;
+      pointerInDeadZone = false;
+      boredomUsed = false;
+      cancelIdleSequence();
       showNeutral();
     };
 
@@ -256,6 +378,8 @@ export function GazeCharacter({ paused }: GazeCharacterProps = {}) {
       hero.removeEventListener("pointerleave", handlePointerLeave);
       finePointer.removeEventListener("change", updateCapability);
       reducedMotion.removeEventListener("change", updateCapability);
+      cancelIdleSequence();
+      cancelBoredom.current = () => undefined;
     };
   }, []);
 

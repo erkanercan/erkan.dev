@@ -239,6 +239,12 @@
   transform: translateY(-8px) rotate(0deg);
 }
 
+.choices button[data-watched="true"] {
+  background: #fffdf8;
+  transform: translateY(-2px) rotate(0deg);
+  transition-duration: 650ms;
+}
+
 .choices button > span {
   margin-right: 12px;
   color: var(--accent);

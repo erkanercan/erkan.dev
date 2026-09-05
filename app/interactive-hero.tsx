@@ -270,6 +270,7 @@ export function InteractiveHero() {
             {(Object.keys(challenges) as ChallengeId[]).map((id, index) => (
               <button
                 key={id}
+                data-boredom-target={id === "midnight" ? "true" : undefined}
                 ref={(button) => {
                   choiceButtons.current[id] = button;
                 }}
