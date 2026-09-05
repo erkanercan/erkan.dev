@@ -259,7 +259,6 @@
   position: relative;
   margin-top: 28px;
   border: 1px dashed currentColor;
-  padding: 20px;
 }
 
 .underSkin::before {
@@ -281,10 +280,102 @@
   border-color: rgba(239, 238, 232, 0.24);
 }
 
-.underSkin p {
+.anatomyTrigger {
+  display: block;
+  width: 100%;
+  border: 0;
+  padding: 20px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.anatomyTrigger > span,
+.anatomyPanel li > span,
+.anatomyTrigger small,
+.sequenceStatus,
+.diagramHeader button {
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-weight: 600;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.anatomyTrigger > span {
+  font-size: 0.64rem;
+}
+
+.anatomyTrigger > p {
   margin: 12px 0 0;
   font-size: 0.76rem;
   line-height: 1.55;
+}
+
+.anatomyTrigger small {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  font-size: 0.54rem;
+  opacity: 0.62;
+}
+
+.anatomyTrigger i {
+  font-size: 1rem;
+  font-style: normal;
+  line-height: 0.7;
+}
+
+.anatomyTrigger:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -6px;
+}
+
+.anatomyPanel {
+  overflow: hidden;
+}
+
+.anatomyPanel ol {
+  margin: 0 20px 20px;
+  border-top: 1px solid currentColor;
+  padding: 0;
+  list-style: none;
+}
+
+.sablebook .anatomyPanel ol {
+  border-color: rgba(23, 34, 29, 0.2);
+}
+
+.radio .anatomyPanel ol {
+  border-color: rgba(239, 238, 232, 0.18);
+}
+
+.anatomyPanel li {
+  display: grid;
+  border-bottom: 1px solid currentColor;
+  padding: 12px 0;
+  grid-template-columns: minmax(72px, 0.32fr) 1fr;
+  gap: 14px;
+}
+
+.sablebook .anatomyPanel li {
+  border-color: rgba(23, 34, 29, 0.2);
+}
+
+.radio .anatomyPanel li {
+  border-color: rgba(239, 238, 232, 0.18);
+}
+
+.anatomyPanel li > span {
+  font-size: 0.53rem;
+}
+
+.anatomyPanel li > p {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.45;
 }
 
 .radioDiagram {
@@ -322,11 +413,29 @@
   font-size: 0.72rem;
 }
 
-.localBadge {
+.diagramHeader button {
   border: 1px solid rgba(157, 164, 255, 0.42);
   border-radius: 999px;
   padding: 7px 10px;
+  background: transparent;
   color: #b8bcff;
+  cursor: pointer;
+  font-size: 0.55rem;
+}
+
+.diagramHeader button:hover,
+.diagramHeader button:focus-visible {
+  background: #b8bcff;
+  color: #111113;
+}
+
+.diagramHeader button:focus-visible {
+  outline: 2px solid #b8bcff;
+  outline-offset: 4px;
+}
+
+.diagramHeader button:disabled {
+  cursor: wait;
 }
 
 .workflow {
@@ -348,6 +457,19 @@
   content: "";
 }
 
+.workflow::after {
+  position: absolute;
+  z-index: 0;
+  top: 49px;
+  left: 7%;
+  width: var(--workflow-progress);
+  height: 2px;
+  background: #b8bcff;
+  box-shadow: 0 0 13px rgba(184, 188, 255, 0.58);
+  content: "";
+  transition: width 480ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .workflow li {
   position: relative;
   z-index: 1;
@@ -356,6 +478,16 @@
   align-items: center;
   text-align: center;
   flex-direction: column;
+  opacity: 0.48;
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.workflow li[data-active="true"] {
+  opacity: 1;
+}
+
+.workflow li[data-current="true"] {
+  transform: translateY(-3px);
 }
 
 .workflow li > span {
@@ -369,6 +501,12 @@
   background: #111113;
   color: #b8bcff;
   font-size: 0.54rem;
+  transition: background-color 240ms ease, color 240ms ease;
+}
+
+.workflow li[data-active="true"] > span {
+  background: #b8bcff;
+  color: #111113;
 }
 
 .workflow strong {
@@ -382,6 +520,14 @@
   color: rgba(239, 238, 232, 0.66);
   font-size: 0.48rem;
   line-height: 1.4;
+}
+
+.sequenceStatus {
+  min-height: 1.45em;
+  margin: -5px 0 18px;
+  color: #b8bcff;
+  font-size: 0.58rem;
+  line-height: 1.45;
 }
 
 .byteLine {
@@ -448,11 +594,7 @@
   padding: 0 19px;
   font-size: 0.76rem;
   font-weight: 650;
-  transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
-}
-
-.caseFooter a:hover {
-  transform: translateY(-3px);
+  transition: background-color 180ms ease, color 180ms ease;
 }
 
 .sablebook .caseFooter a:hover {
@@ -479,8 +621,14 @@
 }
 
 .caseFooter a span {
+  display: inline-block;
   margin-left: 9px;
   color: inherit;
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1) 120ms;
+}
+
+.caseFooter a:is(:hover, :focus-visible) span {
+  transform: translate(4px, -4px);
 }
 
 @media (max-width: 1050px) {
@@ -577,8 +725,9 @@
     grid-template-columns: auto 1fr;
   }
 
-  .localBadge {
-    display: none;
+  .diagramHeader button {
+    grid-column: 2;
+    justify-self: start;
   }
 
   .workflow {
@@ -593,6 +742,10 @@
     left: 24px;
     width: 1px;
     height: auto;
+  }
+
+  .workflow::after {
+    display: none;
   }
 
   .workflow li {
@@ -627,11 +780,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .caseFooter a {
+  .caseFooter a,
+  .caseFooter a span,
+  .workflow::after,
+  .workflow li,
+  .workflow li > span {
     transition: none;
-  }
-
-  .caseFooter a:hover {
-    transform: none;
   }
 }

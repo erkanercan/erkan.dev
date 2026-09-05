@@ -1,0 +1,70 @@
+.wrapper {
+  display: inline;
+}
+
+.statement {
+  display: inline;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-align: inherit;
+}
+
+.statement em {
+  color: var(--accent-on-light);
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 400;
+}
+
+.badly,
+.thatWay {
+  display: inline-block;
+  transition:
+    color 240ms ease,
+    font-family 240ms ease,
+    letter-spacing 240ms ease,
+    transform 240ms ease;
+}
+
+.statement[data-state="bad"] .badly {
+  color: var(--accent-on-light);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  letter-spacing: 0.09em;
+  transform: translateY(0.18em) rotate(-4deg);
+}
+
+.statement[data-state="bad"] .thatWay {
+  letter-spacing: 0.04em;
+  transform: translate(0.24em, -0.12em) rotate(3deg);
+}
+
+.statement:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--accent-on-light);
+  outline-offset: 5px;
+}
+
+.note {
+  display: block;
+  width: fit-content;
+  margin-top: 18px;
+  color: var(--accent-on-light);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.055em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badly,
+  .thatWay {
+    transition: none;
+  }
+}

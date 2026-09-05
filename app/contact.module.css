@@ -90,6 +90,7 @@
 }
 
 .email {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -100,6 +101,23 @@
   font-weight: 560;
   letter-spacing: -0.055em;
   line-height: 1;
+}
+
+.email::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--accent-on-dark);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.email:focus-visible::after {
+  transform: scaleX(1);
 }
 
 .email > span:first-child {
@@ -227,6 +245,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .email > span:last-child,
+  .email::after,
   .socials a {
     transition: none;
   }

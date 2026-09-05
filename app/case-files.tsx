@@ -1,7 +1,8 @@
 import Image from "next/image";
-import mark73Kit from "../public/case-files/73kit-mark.svg";
 import sablebookOverview from "../public/case-files/sablebook-overview.webp";
+import { CaseAnatomy } from "./case-anatomy";
 import styles from "./case-files.module.css";
+import { RadioWorkflow } from "./radio-workflow";
 
 const sablebookFacts = [
   [
@@ -112,13 +113,10 @@ export function CaseFiles() {
           <div className={styles.caseNotes}>
             <p className={styles.marginNote}>My part / everything</p>
             <EvidenceList items={sablebookFacts} />
-            <div className={styles.underSkin}>
-              <span>What I built</span>
-              <p>
-                Gather the missing details, check real availability, handle
-                changes, and ask a human when certainty runs out.
-              </p>
-            </div>
+            <CaseAnatomy
+              kind="sablebook"
+              summary="Gather the missing details, check real availability, handle changes, and ask a human when certainty runs out."
+            />
           </div>
         </div>
 
@@ -152,63 +150,15 @@ export function CaseFiles() {
         </header>
 
         <div className={styles.radioBody}>
-          <div className={styles.radioDiagram} aria-label="The Radio CPS workflow">
-            <div className={styles.diagramHeader}>
-              <Image src={mark73Kit} alt="" width={48} height={48} />
-              <div>
-                <span>73Kit / Radio CPS</span>
-                <p>Local-first radio programming</p>
-              </div>
-              <span className={styles.localBadge}>Local only</span>
-            </div>
-            <ol className={styles.workflow}>
-              <li>
-                <span>01</span>
-                <strong>Read</strong>
-                <small>the full radio</small>
-              </li>
-              <li>
-                <span>02</span>
-                <strong>Back up</strong>
-                <small>the untouched baseline</small>
-              </li>
-              <li>
-                <span>03</span>
-                <strong>Edit</strong>
-                <small>the working Codeplug</small>
-              </li>
-              <li>
-                <span>04</span>
-                <strong>Review</strong>
-                <small>the exact Change Set</small>
-              </li>
-              <li>
-                <span>05</span>
-                <strong>Write</strong>
-                <small>to the verified source radio</small>
-              </li>
-            </ol>
-            <p className={styles.byteLine} aria-hidden="true">
-              {Array.from({ length: 56 }, (_, index) => (
-                <span key={index}>{index % 3 === 0 ? "73" : index % 3 === 1 ? "4B" : "00"}</span>
-              ))}
-            </p>
-            <p className={styles.diagramCaption}>
-              The screen is the easy part. Under it: identity checks,
-              compatibility gates, recovery artifacts, and byte-level codecs.
-            </p>
-          </div>
+          <RadioWorkflow />
 
           <div className={styles.caseNotes}>
             <p className={styles.marginNote}>My part / everything</p>
             <EvidenceList items={radioFacts} />
-            <div className={styles.underSkin}>
-              <span>What I built</span>
-              <p>
-                Web Serial, compatibility checks, recovery paths, source-radio
-                identity, and a refusal to turn “probably fine” into a Write button.
-              </p>
-            </div>
+            <CaseAnatomy
+              kind="radio"
+              summary="Web Serial, compatibility checks, recovery paths, source-radio identity, and a refusal to turn “probably fine” into a Write button."
+            />
           </div>
         </div>
 

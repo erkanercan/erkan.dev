@@ -63,8 +63,10 @@ export function InteractiveHero() {
   const [selected, setSelected] = useState<ChallengeId | null>(null);
   const [midnightTaps, setMidnightTaps] = useState(0);
   const [experimentActive, setExperimentActive] = useState(false);
+  const [closing, setClosing] = useState(false);
   const challenge = selected ? challenges[selected] : null;
   const experimentTimer = useRef<number | null>(null);
+  const closeTimer = useRef<number | null>(null);
   const xrayTitle = useRef<HTMLHeadingElement>(null);
   const lastSelected = useRef<ChallengeId | null>(null);
   const returningToChoices = useRef(false);
@@ -86,6 +88,10 @@ export function InteractiveHero() {
     return () => {
       if (experimentTimer.current !== null) {
         window.clearTimeout(experimentTimer.current);
+      }
+
+      if (closeTimer.current !== null) {
+        window.clearTimeout(closeTimer.current);
       }
 
       document.querySelector<HTMLElement>("[data-site-page]")?.removeAttribute(
@@ -134,6 +140,7 @@ export function InteractiveHero() {
   };
 
   const inspect = (id: ChallengeId) => {
+    setClosing(false);
     lastSelected.current = id;
     setMidnightTaps(id === "midnight" ? 1 : 0);
     setSelected(id);
@@ -143,7 +150,12 @@ export function InteractiveHero() {
     stopExperiment();
     setMidnightTaps(0);
     returningToChoices.current = true;
-    setSelected(null);
+    setClosing(true);
+    closeTimer.current = window.setTimeout(() => {
+      setSelected(null);
+      setClosing(false);
+      closeTimer.current = null;
+    }, 360);
   };
 
   return (
@@ -186,6 +198,7 @@ export function InteractiveHero() {
       {challenge ? (
         <section
           className={styles.result}
+          data-closing={closing || undefined}
           aria-labelledby="xray-title"
         >
           <div className={styles.inputCard}>
@@ -263,7 +276,7 @@ export function InteractiveHero() {
               >
                 {challenge.linkLabel} <span aria-hidden="true">↗</span>
               </a>
-              <button type="button" onClick={reset}>
+              <button type="button" onClick={reset} disabled={closing}>
                 Another mess <span aria-hidden="true">↺</span>
               </button>
             </div>

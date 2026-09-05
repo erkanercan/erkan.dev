@@ -1,4 +1,5 @@
 import styles from "./worldview.module.css";
+import { BadWorkCorrection } from "./bad-work-correction";
 import { DogInterruptionTrigger } from "./dog-interruption";
 import { WrongAdmission } from "./wrong-admission";
 
@@ -30,8 +31,8 @@ export function Worldview() {
         </li>
         <li className={styles.craft}>
           <p>
-            What I cannot stand: knowing a job is being done badly, then
-            continuing to do it <em>that way.</em>
+            What I cannot stand: knowing a job is being done{" "}
+            <BadWorkCorrection />
           </p>
         </li>
         <li className={styles.dogs}>

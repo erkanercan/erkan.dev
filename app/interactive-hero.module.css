@@ -270,6 +270,9 @@
   background: rgba(25, 27, 24, 0.58);
   color: #eeeae3;
   backdrop-filter: blur(8px);
+  transition:
+    opacity 280ms ease,
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .inputCard h2 {
@@ -323,6 +326,25 @@
   box-shadow: 0 28px 80px rgba(10, 10, 8, 0.3);
   color: #eeeae3;
   backdrop-filter: blur(18px);
+  transition:
+    opacity 280ms ease,
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.result[data-closing="true"] .inputCard {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-12px);
+}
+
+.result[data-closing="true"] .xrayPanel {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(18px);
+}
+
+.result[data-closing="true"] .status {
+  opacity: 0;
 }
 
 .xrayPanel[data-questionable="true"] {
@@ -568,6 +590,8 @@
   .portrait :global(.character-visual),
   .portrait :global(.character-image),
   .xrayPortrait,
+  .inputCard,
+  .xrayPanel,
   .choices button,
   .status,
   .actions a,
