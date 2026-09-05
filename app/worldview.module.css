@@ -1,0 +1,212 @@
+.worldview {
+  position: relative;
+  margin: 0 clamp(10px, 1.25vw, 20px) clamp(10px, 1.25vw, 20px);
+  overflow: clip;
+  border: 1px solid rgba(23, 23, 20, 0.18);
+  border-radius: clamp(22px, 2.5vw, 38px);
+  padding: clamp(72px, 9vw, 138px) clamp(22px, 5vw, 76px) 34px;
+  background: #d7d1c7;
+  color: #171714;
+}
+
+.worldview::before {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(23, 23, 20, 0.16) 0.65px, transparent 0.65px);
+  background-size: 8px 8px;
+  content: "";
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.header,
+.notes {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1420px);
+  margin-inline: auto;
+}
+
+.header {
+  display: grid;
+  align-items: start;
+  padding-bottom: clamp(72px, 10vw, 150px);
+  grid-template-columns: minmax(140px, 0.34fr) minmax(420px, 1.2fr) minmax(170px, 0.4fr);
+  gap: clamp(20px, 3vw, 50px);
+}
+
+.header > p:first-child,
+.aside,
+.notes small {
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.065em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.header > p:first-child,
+.aside {
+  margin: 6px 0 0;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: clamp(3.5rem, 7vw, 8.1rem);
+  font-weight: 620;
+  letter-spacing: -0.09em;
+  line-height: 0.84;
+}
+
+.header h2 em,
+.notes em {
+  color: #b53d29;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 400;
+}
+
+.header h2 em {
+  display: inline-block;
+  margin-top: 0.08em;
+}
+
+.aside {
+  max-width: 140px;
+  justify-self: end;
+}
+
+.notes {
+  display: grid;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  border-bottom: 1px solid rgba(23, 23, 20, 0.72);
+  list-style: none;
+}
+
+.notes li {
+  position: relative;
+  border-top: 1px solid rgba(23, 23, 20, 0.72);
+  padding: clamp(24px, 3vw, 44px) clamp(8px, 1.8vw, 28px) clamp(40px, 5vw, 78px) 0;
+}
+
+.notes p {
+  margin: 0;
+  font-size: clamp(2.1rem, 4.2vw, 5.2rem);
+  font-weight: 580;
+  letter-spacing: -0.075em;
+  line-height: 0.94;
+}
+
+.notes small {
+  display: block;
+  max-width: 210px;
+  margin-top: 22px;
+}
+
+.humanity {
+  grid-column: 1 / 9;
+}
+
+.honesty {
+  grid-column: 10 / 13;
+}
+
+.honesty p,
+.dogs p {
+  font-size: clamp(1.85rem, 3.2vw, 3.8rem);
+}
+
+.craft {
+  grid-column: 3 / 13;
+}
+
+.dogs {
+  grid-column: 1 / 4;
+}
+
+.laughter {
+  grid-column: 4 / 9;
+}
+
+.experiments {
+  grid-column: 9 / 13;
+}
+
+.laughter p,
+.experiments p {
+  font-size: clamp(1.75rem, 2.7vw, 3.2rem);
+}
+
+@media (max-width: 900px) {
+  .header {
+    grid-template-columns: 110px 1fr;
+  }
+
+  .header h2,
+  .aside {
+    grid-column: 2;
+  }
+
+  .aside {
+    justify-self: start;
+  }
+
+  .notes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .humanity,
+  .craft {
+    grid-column: 1 / -1;
+  }
+
+  .honesty,
+  .dogs,
+  .laughter,
+  .experiments {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .worldview {
+    padding: 54px 20px 28px;
+  }
+
+  .header {
+    display: block;
+    padding-bottom: 72px;
+  }
+
+  .header > p:first-child {
+    margin-bottom: 27px;
+  }
+
+  .header h2 {
+    font-size: clamp(3.2rem, 15vw, 5.1rem);
+  }
+
+  .aside {
+    margin-top: 26px;
+  }
+
+  .notes {
+    display: block;
+  }
+
+  .notes li {
+    padding: 26px 0 46px;
+  }
+
+  .notes p,
+  .honesty p,
+  .dogs p,
+  .laughter p,
+  .experiments p {
+    font-size: clamp(2.35rem, 11vw, 3.7rem);
+  }
+
+}
