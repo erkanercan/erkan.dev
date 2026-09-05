@@ -526,6 +526,7 @@
     min-height: calc(100svh - 20px);
     margin: 0;
     border-radius: 22px 22px 0 0;
+    background: #9c948a;
   }
 
   .intro {
@@ -539,6 +540,10 @@
   .intro > .kicker,
   .instruction {
     grid-column: 1;
+  }
+
+  .intro > .kicker {
+    max-width: 36ch;
   }
 
   .intro h1 {
@@ -578,6 +583,16 @@
 
   .xrayPanel {
     padding: 24px;
+  }
+}
+
+@media (max-width: 420px) and (max-height: 650px) {
+  .intro h1 {
+    font-size: 3.15rem;
+  }
+
+  .portrait {
+    top: 34%;
   }
 }
 

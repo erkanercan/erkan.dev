@@ -74,12 +74,12 @@ export function InteractiveHero() {
 
   useEffect(() => {
     if (selected) {
-      xrayTitle.current?.focus();
+      xrayTitle.current?.focus({ preventScroll: true });
       return;
     }
 
     if (returningToChoices.current && lastSelected.current) {
-      choiceButtons.current[lastSelected.current]?.focus();
+      choiceButtons.current[lastSelected.current]?.focus({ preventScroll: true });
       returningToChoices.current = false;
     }
   }, [selected]);
