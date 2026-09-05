@@ -5,7 +5,7 @@ export function Contact() {
     <section className={styles.contact} aria-labelledby="contact-title">
       <div className={styles.inner}>
         <header className={styles.header}>
-          <p>04 / Contact</p>
+          <p>Contact</p>
           <p>Email works best</p>
         </header>
 

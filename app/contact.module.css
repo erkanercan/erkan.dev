@@ -1,12 +1,13 @@
 .contact {
   position: relative;
   min-height: calc(100svh - clamp(20px, 2.5vw, 40px));
-  margin: clamp(10px, 1.25vw, 20px);
+  margin: 0;
   overflow: hidden;
   border: 1px solid rgba(238, 234, 227, 0.18);
-  border-radius: clamp(22px, 2.5vw, 38px);
+  border-radius: 0 0 clamp(22px, 2.5vw, 38px) clamp(22px, 2.5vw, 38px);
   background: #1b1c18;
   color: #eeeae3;
+  box-shadow: 0 -70px 120px rgba(27, 28, 24, 0.1);
 }
 
 .contact::before {
@@ -17,6 +18,7 @@
     linear-gradient(90deg, rgba(238, 234, 227, 0.045) 1px, transparent 1px);
   background-size: 32px 32px;
   content: "";
+  mask-image: linear-gradient(to bottom, transparent, black 22%);
   pointer-events: none;
 }
 

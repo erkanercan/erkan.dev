@@ -65,7 +65,7 @@ export function CaseFiles() {
   return (
     <section className={styles.caseFiles} aria-labelledby="case-files-title">
       <header className={styles.sectionHeader}>
-        <p>02 / Case files</p>
+        <p>Case files</p>
         <h2 id="case-files-title">
           Built things,
           <br />
@@ -79,7 +79,7 @@ export function CaseFiles() {
 
       <article className={`${styles.case} ${styles.sablebook}`} id="sablebook-case">
         <header className={styles.caseHeader}>
-          <p className={styles.caseNumber}>Case 01 / Sablebook</p>
+          <p className={styles.caseNumber}>Sablebook / Case file</p>
           <h3>
             The booking is a conversation.
             <br />
@@ -141,7 +141,7 @@ export function CaseFiles() {
 
       <article className={`${styles.case} ${styles.radio}`} id="73kit-case">
         <header className={styles.caseHeader}>
-          <p className={styles.caseNumber}>Case 02 / 73Kit · Radio CPS</p>
+          <p className={styles.caseNumber}>73Kit / Radio CPS</p>
           <h3>
             A friendlier face for
             <br />

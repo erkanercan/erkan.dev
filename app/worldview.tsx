@@ -4,7 +4,7 @@ export function Worldview() {
   return (
     <section className={styles.worldview} aria-labelledby="worldview-title">
       <header className={styles.header}>
-        <p>03 / Person, not projects</p>
+        <p>Enough about the work.</p>
         <h2 id="worldview-title">
           A few things I know
           <br />

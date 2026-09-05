@@ -1,7 +1,7 @@
 .caseFiles {
   position: relative;
   overflow: hidden;
-  padding: clamp(110px, 15vw, 220px) clamp(18px, 4vw, 64px) clamp(80px, 11vw, 160px);
+  padding: clamp(100px, 12vw, 180px) clamp(22px, 5vw, 76px) clamp(72px, 8vw, 116px);
   background: #e6e1d9;
 }
 

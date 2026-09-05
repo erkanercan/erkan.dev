@@ -1,15 +1,18 @@
 import { CaseFiles } from "./case-files";
 import { Contact } from "./contact";
 import { InteractiveHero } from "./interactive-hero";
+import styles from "./page.module.css";
 import { Worldview } from "./worldview";
 
 export default function Home() {
   return (
-    <main>
+    <main className={styles.page}>
       <InteractiveHero />
-      <CaseFiles />
-      <Worldview />
-      <Contact />
+      <div className={styles.continuation}>
+        <CaseFiles />
+        <Worldview />
+        <Contact />
+      </div>
     </main>
   );
 }
