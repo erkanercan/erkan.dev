@@ -283,29 +283,6 @@
   line-height: 0.92;
 }
 
-.experimentTrigger {
-  display: inline;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  font: inherit;
-  letter-spacing: inherit;
-  line-height: inherit;
-  text-align: inherit;
-}
-
-.experimentTrigger:disabled {
-  cursor: default;
-}
-
-.experimentTrigger:focus-visible {
-  border-radius: 2px;
-  outline: 2px solid var(--accent-on-dark);
-  outline-offset: 5px;
-}
-
 .inputCard > p:last-child {
   max-width: 220px;
   margin-bottom: 0;
@@ -346,26 +323,6 @@
   opacity: 0;
 }
 
-.xrayPanel[data-questionable="true"] {
-  border-color: color-mix(in srgb, var(--accent-on-dark) 50%, transparent);
-}
-
-.panelContent[data-questionable="true"] {
-  animation: panel-correction 260ms ease-out both;
-}
-
-@keyframes panel-correction {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .xrayPanel > .kicker,
 .layers span {
   color: var(--accent-on-dark);
@@ -403,32 +360,6 @@
   margin: 0;
   font-size: 0.75rem;
   line-height: 1.45;
-}
-
-.sourceNote {
-  display: grid;
-}
-
-.sourceNote p {
-  grid-area: 1 / 1;
-  transition: opacity 180ms ease 1.5s;
-}
-
-.sourceHonesty {
-  opacity: 0;
-}
-
-.xrayPanel:has(.projectLink[data-honest-source="true"]:is(:hover, :focus))
-  .sourceNote
-  p {
-  opacity: 0;
-  transition-delay: 650ms;
-}
-
-.xrayPanel:has(.projectLink[data-honest-source="true"]:is(:hover, :focus))
-  .sourceNote
-  .sourceHonesty {
-  opacity: 1;
 }
 
 .actions {
@@ -610,14 +541,6 @@
   .status,
   .actions a,
   .xrayPanel button {
-    transition: none;
-  }
-
-  .panelContent {
-    animation: none;
-  }
-
-  .sourceNote p {
     transition: none;
   }
 

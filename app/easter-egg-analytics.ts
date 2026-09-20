@@ -3,10 +3,8 @@ export const EASTER_EGG_EVENT = "erkan:easter-egg-found";
 export const EASTER_EGG_IDS = [
   "dog-interruption",
   "wrong-admission",
-  "page-tilt",
   "cw-sos",
   "boredom-glance",
-  "honest-source-note",
 ] as const;
 
 export type EasterEggId = (typeof EASTER_EGG_IDS)[number];

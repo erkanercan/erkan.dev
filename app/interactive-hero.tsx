@@ -4,20 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import xrayPortrait from "../public/character/xray-anatomy.webp";
-import { recordEasterEgg } from "./easter-egg-analytics";
 import { GazeCharacter } from "./gaze-character";
 import styles from "./interactive-hero.module.css";
-
-const experimentDuration = 3600;
-
-const experimentLayers = [
-  ["What changed", "0.35 degrees."],
-  ["Who asked", "Nobody."],
-  ["Recovery", "Give it a second."],
-] as const;
-
-const sourceHonesty =
-  "Yes, all 105 eye frames are in there. No, it was not the sensible solution.";
 
 const challenges = {
   booking: {
@@ -44,16 +32,19 @@ const challenges = {
       ["Under the skin", "Bytes, codecs and compatibility checks work underneath."],
     ],
   },
-  midnight: {
-    label: "An idea from 02:13",
-    detail: "one character · too many frames · no sensible bedtime",
-    product: "erkan.dev",
-    href: "https://github.com/erkanercan/erkan.dev",
-    linkLabel: "View the source",
+  light: {
+    label: "A light that needs strangers",
+    detail: "one shared light · strangers taking shifts · a sleeping dog",
+    product: "ON · Keep the Light On",
+    href: "https://on.erkan.dev",
+    linkLabel: "Keep the light on",
     layers: [
-      ["What people need", "See how I think, not just where I worked"],
-      ["Cannot break", "It still has to be quick, readable and useful."],
-      ["Under the skin", "105 gaze frames, one X-ray and no résumé-card grid."],
+      ["What people need", "Keep one unnecessary light on together"],
+      ["Cannot break", "Every visitor must see the same honest state."],
+      [
+        "Under the skin",
+        "WebSockets, expiring leases and one Durable Object keep everyone in agreement.",
+      ],
     ],
   },
 } as const;
@@ -62,13 +53,9 @@ type ChallengeId = keyof typeof challenges;
 
 export function InteractiveHero() {
   const [selected, setSelected] = useState<ChallengeId | null>(null);
-  const [midnightTaps, setMidnightTaps] = useState(0);
-  const [experimentActive, setExperimentActive] = useState(false);
   const [closing, setClosing] = useState(false);
   const challenge = selected ? challenges[selected] : null;
-  const experimentTimer = useRef<number | null>(null);
   const closeTimer = useRef<number | null>(null);
-  const honestyTimer = useRef<number | null>(null);
   const xrayTitle = useRef<HTMLHeadingElement>(null);
   const lastSelected = useRef<ChallengeId | null>(null);
   const returningToChoices = useRef(false);
@@ -88,74 +75,19 @@ export function InteractiveHero() {
 
   useEffect(() => {
     return () => {
-      if (experimentTimer.current !== null) {
-        window.clearTimeout(experimentTimer.current);
-      }
-
       if (closeTimer.current !== null) {
         window.clearTimeout(closeTimer.current);
       }
-
-      if (honestyTimer.current !== null) {
-        window.clearTimeout(honestyTimer.current);
-      }
-
-      document.querySelector<HTMLElement>("[data-site-page]")?.removeAttribute(
-        "data-experiment",
-      );
     };
   }, []);
-
-  const stopExperiment = () => {
-    if (experimentTimer.current !== null) {
-      window.clearTimeout(experimentTimer.current);
-      experimentTimer.current = null;
-    }
-
-    document
-      .querySelector<HTMLElement>("[data-site-page]")
-      ?.removeAttribute("data-experiment");
-    setExperimentActive(false);
-  };
-
-  const startExperiment = () => {
-    if (experimentActive) return;
-
-    const page = document.querySelector<HTMLElement>("[data-site-page]");
-    if (!page) return;
-
-    page.dataset.experiment = "tilt";
-    recordEasterEgg("page-tilt");
-    setExperimentActive(true);
-    experimentTimer.current = window.setTimeout(() => {
-      page.removeAttribute("data-experiment");
-      setExperimentActive(false);
-      setMidnightTaps(1);
-      experimentTimer.current = null;
-    }, experimentDuration);
-  };
-
-  const tapMidnightIdea = () => {
-    if (experimentActive) return;
-
-    if (midnightTaps >= 2) {
-      startExperiment();
-      return;
-    }
-
-    setMidnightTaps((current) => current + 1);
-  };
 
   const inspect = (id: ChallengeId) => {
     setClosing(false);
     lastSelected.current = id;
-    setMidnightTaps(id === "midnight" ? 1 : 0);
     setSelected(id);
   };
 
   const reset = () => {
-    stopExperiment();
-    setMidnightTaps(0);
     returningToChoices.current = true;
     setClosing(true);
     closeTimer.current = window.setTimeout(() => {
@@ -165,26 +97,11 @@ export function InteractiveHero() {
     }, 360);
   };
 
-  const clearHonestyTimer = () => {
-    if (honestyTimer.current === null) return;
-    window.clearTimeout(honestyTimer.current);
-    honestyTimer.current = null;
-  };
-
-  const scheduleHonestyDiscovery = () => {
-    clearHonestyTimer();
-    honestyTimer.current = window.setTimeout(() => {
-      recordEasterEgg("honest-source-note");
-      honestyTimer.current = null;
-    }, 850);
-  };
-
   return (
     <section
       className={styles.hero}
       data-hero
       data-xray={challenge ? "true" : undefined}
-      data-experiment={experimentActive ? "true" : undefined}
       aria-label="Introduction"
     >
       <header className={styles.header}>
@@ -209,9 +126,7 @@ export function InteractiveHero() {
       </div>
 
       <p className={styles.srOnly} aria-live="polite">
-        {experimentActive
-          ? "The page tilted slightly. It will repair itself."
-          : challenge
+        {challenge
           ? `${challenge.product} X-ray open.`
           : "Choose a problem to inspect."}
       </p>
@@ -224,86 +139,31 @@ export function InteractiveHero() {
         >
           <div className={styles.inputCard}>
             <p className={styles.kicker}>The mess</p>
-            <h2>
-              {selected === "midnight" ? (
-                <button
-                  className={styles.experimentTrigger}
-                  type="button"
-                  onClick={tapMidnightIdea}
-                  disabled={experimentActive}
-                >
-                  {challenge.label}
-                </button>
-              ) : (
-                challenge.label
-              )}
-            </h2>
+            <h2>{challenge.label}</h2>
             <p>{challenge.detail}</p>
           </div>
 
-          <div
-            className={styles.xrayPanel}
-            data-questionable={experimentActive ? "true" : undefined}
-          >
-            <div
-              className={styles.panelContent}
-              data-questionable={experimentActive ? "true" : undefined}
-            >
-              <p className={styles.kicker}>
-                {experimentActive
-                  ? "Unscheduled experiment · erkan.dev"
-                  : `Product X-ray · ${challenge.product}`}
-              </p>
+          <div className={styles.xrayPanel}>
+            <div className={styles.panelContent}>
+              <p className={styles.kicker}>{`Product X-ray · ${challenge.product}`}</p>
               <h1 id="xray-title" ref={xrayTitle} tabIndex={-1}>
-                {experimentActive ? (
-                  <>One harmless<br />CSS <em>property.</em></>
-                ) : (
-                  <>What had to<br />stay <em>true.</em></>
-                )}
+                What had to<br />stay <em>true.</em>
               </h1>
             </div>
             <div className={styles.layers}>
-              {(experimentActive ? experimentLayers : challenge.layers).map(([label, value], index) => (
+              {challenge.layers.map(([label, value], index) => (
                 <div key={label}>
                   <span>0{index + 1} · {label}</span>
-                  {selected === "midnight" && label === "Under the skin" ? (
-                    <div className={styles.sourceNote}>
-                      <p>{value}</p>
-                      <p className={styles.sourceHonesty} aria-hidden="true">
-                        {sourceHonesty}
-                      </p>
-                    </div>
-                  ) : (
-                    <p>{value}</p>
-                  )}
+                  <p>{value}</p>
                 </div>
               ))}
             </div>
-            {selected === "midnight" ? (
-              <span className={styles.srOnly} id="source-honesty">
-                {sourceHonesty}
-              </span>
-            ) : null}
             <div className={styles.actions}>
               <a
                 className={styles.projectLink}
                 href={challenge.href}
                 target="_blank"
                 rel="noreferrer"
-                data-honest-source={selected === "midnight" ? "true" : undefined}
-                onPointerEnter={
-                  selected === "midnight" ? scheduleHonestyDiscovery : undefined
-                }
-                onPointerLeave={
-                  selected === "midnight" ? clearHonestyTimer : undefined
-                }
-                onFocus={
-                  selected === "midnight" ? scheduleHonestyDiscovery : undefined
-                }
-                onBlur={selected === "midnight" ? clearHonestyTimer : undefined}
-                aria-describedby={
-                  selected === "midnight" ? "source-honesty" : undefined
-                }
               >
                 {challenge.linkLabel} <span aria-hidden="true">↗</span>
               </a>
@@ -314,9 +174,7 @@ export function InteractiveHero() {
           </div>
 
           <p className={styles.status}>
-            {experimentActive
-              ? "Mode · Questionable judgment"
-              : "Mode 02 · Looking underneath"}
+            Mode 02 · Looking underneath
           </p>
         </section>
       ) : (
@@ -334,7 +192,7 @@ export function InteractiveHero() {
             {(Object.keys(challenges) as ChallengeId[]).map((id) => (
               <button
                 key={id}
-                data-boredom-target={id === "midnight" ? "true" : undefined}
+                data-boredom-target={id === "light" ? "true" : undefined}
                 ref={(button) => {
                   choiceButtons.current[id] = button;
                 }}
